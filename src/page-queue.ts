@@ -2,7 +2,7 @@
  * @Autor: theajack
  * @Date: 2021-05-19 22:40:45
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-20 23:52:45
+ * @LastEditTime: 2021-05-21 00:20:29
  * @Description: Coding something
  */
 
@@ -11,8 +11,6 @@ import {IPage} from './type';
 import {isPageHide, random} from './util';
 
 const PAGE_QUEUE_KEY = 'cwm_page_queue';
-
-setInterval(() => console.log(readPageQueue()), 3000);
 
 export function readPageQueue (): IPage[] {
     const result = storage.read(PAGE_QUEUE_KEY);
