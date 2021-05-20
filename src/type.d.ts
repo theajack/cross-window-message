@@ -5,6 +5,8 @@ export interface IJson<T = any> {
 export interface IPage {
     name: string;
     id: string;
+    index: number;
+    show: boolean;
 }
 
 export interface IMsgData {
@@ -13,4 +15,6 @@ export interface IMsgData {
     messageType: string | number;
     messageId: string;
     innerMessageType?: number;
+    targetPageId?: string;
+    targetPageName?: string;
 }

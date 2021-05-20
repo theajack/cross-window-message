@@ -12,6 +12,7 @@ module.exports = {
     },
     devtool: 'eval-source-map',
     devServer: {
+        port: 8081,
         contentBase: path.resolve('./', 'public'),
         historyApiFallback: true,
         inline: true,

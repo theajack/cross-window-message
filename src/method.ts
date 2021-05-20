@@ -13,6 +13,8 @@ export const INNER_MSG_TYPE = {
     CLOSE_PAGE_BY_NAME: 4,
     ALERT_IN_TARGET_NAME: 5,
     ALERT_IN_TARGET_ID: 6,
+    ENSURE_ALIVE: 7,
+    REPLAY_ALIVE: 8,
 };
 
 export function getDefaultPageName () {
@@ -26,6 +28,6 @@ export function closePage () {
     }, 100);
 }
 
-export function onUnload (fn: ()=>void) {
+export function onUnload (fn: (e: BeforeUnloadEvent)=>void) {
     window.addEventListener('beforeunload', fn, true);
 }
