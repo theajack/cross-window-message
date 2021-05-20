@@ -18,17 +18,20 @@ export interface IMsgData {
     targetPageId?: string;
     targetPageName?: string;
 }
-export interface IMessager {
+
+interface IPageEventCollection {
+    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onClick(func: (event: MouseEvent) => void): () => void;
+    onShow(func: (event: Event) => void): () => void;
+    onHide(func: (event: Event) => void): () => void;
+}
+export interface IMessager extends IPageEventCollection {
     pageId: string;
     pageName: string;
     postMessage(data: any, messageType?: number | string): void;
     postMessageToTargetId(targetPageId: string, data: any, messageType?: number | string): void;
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
-    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
-    onClick(func: (event: MouseEvent) => void): () => void;
-    onShow(func: (event: Event) => void): () => void;
-    onHide(func: (event: Event) => void): () => void;
     method: {
         closeOtherPage(): void;
         closeOtherSamePage(): void;
@@ -58,12 +61,7 @@ export interface IPostMessage {
 }
 
 export interface IPageEvents {
-    events: {
-        onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
-        onClick(func: (event: MouseEvent) => void): () => void;
-        onShow(func: (event: Event) => void): () => void;
-        onHide(func: (event: Event) => void): () => void;
-    };
+    events: IPageEventCollection;
     triggerUnload(event: BeforeUnloadEvent): void;
     triggerClick(event: MouseEvent): void;
     triggerPageShow(event: Event): void;
