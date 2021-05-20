@@ -2,14 +2,14 @@
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-21 00:19:10
+ * @LastEditTime: 2021-05-21 00:23:24
  * @FilePath: \cross-window-message\src\index.ts
  * @Description: Coding something
  */
 import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload} from './method';
-import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop} from './page-queue';
+import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop, readPageQueue} from './page-queue';
 import {IMsgData, IPage, IMessager, IPostMessage, IPageEvents} from './type';
 import {onPageShowHide} from './util';
 
@@ -124,6 +124,9 @@ function createPageMethod () {
         },
         getLastOpenPage,
         getLatestActivePage,
+        getAllPages () {
+            return readPageQueue();
+        }
     };
 }
 

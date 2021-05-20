@@ -41,6 +41,7 @@ export interface IMessager extends IPageEventCollection {
         closePageByPageId(pageId: string): void;
         getLastOpenPage(): IPage | null;
         getLatestActivePage(): IPage | null;
+        getAllPages(): IPage[];
     }
 }
 
