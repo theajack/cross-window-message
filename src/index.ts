@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-20 23:57:18
+ * @LastEditTime: 2021-05-21 00:19:10
  * @FilePath: \cross-window-message\src\index.ts
  * @Description: Coding something
  */
@@ -10,7 +10,7 @@ import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload} from './method';
 import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop} from './page-queue';
-import {IMsgData, IPage} from './type';
+import {IMsgData, IPage, IMessager, IPostMessage, IPageEvents} from './type';
 import {onPageShowHide} from './util';
 
 const MSG_KEY = 'cross_window_msg';
@@ -61,22 +61,6 @@ function handleInnerMessage (msgData: IMsgData, currentPage: IPage) {
             break;
         default: break;
     }
-}
-
-interface IPostMessage {
-    ({
-        data,
-        messageType,
-        innerMessageType,
-        targetPageId,
-        targetPageName
-    }: {
-        data?: any;
-        messageType?: string | number;
-        innerMessageType?: number;
-        targetPageId?: string;
-        targetPageName?: string;
-    }): void;
 }
 
 function initBasePostMessage (page: IPage, onHandleData: (msgData: IMsgData)=>void) {
@@ -161,26 +145,6 @@ function createDataHandler (currentPage: IPage, eventReady: IEventReadyEmit<IMsg
     };
 }
 
-interface IMessager {
-    pageId: string;
-    pageName: string;
-    postMessage(data: any, messageType?: number | string): void;
-    postMessageToTargetId(targetPageId: string, data: any, messageType?: number | string): void;
-    postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
-    onMessage(fn: (msgData: IMsgData) => void): ()=>void;
-    removeListener(fn: (msgData: IMsgData) => void): void;
-    method: {
-        closeOtherPage(): void;
-        closeOtherSamePage(): void;
-        alertInTargetName(text: string | number, pageName: string): void;
-        alertInTargetId(text: string | number, pageId: string): void;
-        closePageByPageName(pageName: string): void;
-        closePageByPageId(pageId: string): void;
-        getLastOpenPage(): IPage | null;
-        getLatestActivePage(): IPage | null;
-    }
-}
-
 export function initMessager (
     pageName = getDefaultPageName(),
     pageId: string = ''
@@ -220,9 +184,6 @@ export function initMessager (
         onMessage (fn: (msgData: IMsgData) => void) {
             onEventReady(fn);
             return () => removeListener(fn);
-        },
-        removeListener (fn: (msgData: IMsgData) => void) {
-            removeListener(fn);
         },
         ...pageEvents.events,
         method: createPageMethod()
@@ -265,19 +226,6 @@ function initPageActiveEvent (pageId: string, pageEvents: IPageEvents) {
     }, true);
 }
 
-interface IPageEvents {
-    events: {
-        onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
-        onClick(func: (event: MouseEvent) => void): () => void;
-        onShow(func: (event: Event) => void): () => void;
-        onHide(func: (event: Event) => void): () => void;
-    };
-    triggerUnload(event: BeforeUnloadEvent): void;
-    triggerClick(event: MouseEvent): void;
-    triggerPageShow(event: Event): void;
-    triggerPageHide(event: Event): void;
-}
-
 function createPageEvents (): IPageEvents {
     enum EventType {
         Unload,
@@ -285,7 +233,6 @@ function createPageEvents (): IPageEvents {
         Show,
         Hide,
     }
-
     interface IPageEventData {
         type: EventType;
         event: Event;
@@ -339,6 +286,5 @@ function createPageEvents (): IPageEvents {
         triggerPageHide (event: Event) {
             return emitEvent(event, EventType.Hide);
         }
-
     };
 }
