@@ -44,6 +44,8 @@
 4. 支持标记和追踪各个页面的状态，方便进行全局页面管理
 5. 支持关闭子页面等多种方法调用
 6. 支持监听页面事件
+7. 页面存活检查，保证页面状态同步
+8. typescript开发，使用简单，体积小巧
 
 ### 1. 安装使用
 
@@ -222,7 +224,7 @@ messager.method 对象上暴露了一些工具方法
 ```js
 import initMessager from 'cross-window-message'; 
 const messager = initMessager('pageName', 'pageId');
-messager.method.closeOtherPage()
+messager.method.closeOtherPage();
 ```
 
 ```ts
