@@ -24,7 +24,7 @@
     <a href="https://www.github.com/theajack/cross-window-message/blob/master/LICENSE" target="_black">
         <img src="https://img.shields.io/github/license/theajack/cross-window-message?color=%232DCE89&logo=github" alt="license" />
     </a>
-    <a href="https://cdn.jsdelivr.net/gh/theajack/cross-window-message/dist/cross-window-message.latest.min.js"><img src="https://img.shields.io/bundlephobia/minzip/cross-window-message.svg" alt="Size"></a>
+    <a href="https://cdn.jsdelivr.net/npm/cross-window-message/cross-window-message.min.js"><img src="https://img.shields.io/bundlephobia/minzip/cross-window-message.svg" alt="Size"></a>
     <a href="https://github.com/theajack/cross-window-message/search?l=javascript"><img src="https://img.shields.io/github/languages/top/theajack/cross-window-message.svg" alt="TopLang"></a>
     <a href="https://github.com/theajack/cross-window-message/issues"><img src="https://img.shields.io/github/issues-closed/theajack/cross-window-message.svg" alt="issue"></a>
     <a href="https://www.github.com/theajack/cross-window-message"><img src="https://img.shields.io/librariesio/dependent-repos/npm/cross-window-message.svg" alt="Dependent"></a>
@@ -32,7 +32,7 @@
 
 <h3>🚀 优雅的跨窗口通信与全局页面管理解决方案</h3>
 
-**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [Update Log](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [Feedback bug](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
+**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [更新日志](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [反馈](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
 
 ---
 
