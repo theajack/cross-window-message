@@ -38,7 +38,7 @@
 
 ### 0. Features
 
-1. Support directional traffic and broadcast communication between different pages
+1. Support directional communication and broadcast communication between different pages
 2. Supports pages that can be opened in any way, not limited to the window.open method
 3. Support communication between multiple sub-pages opened by the main page
 4. Support tagging and tracking the status of each page to facilitate global page management
