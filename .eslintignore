@@ -2,4 +2,6 @@
 /public/index.html
 /npm
 /cdn
-*.min.js
+/dist
+**/*.html
+**/*.min.js

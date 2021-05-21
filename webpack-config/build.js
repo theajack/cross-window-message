@@ -14,7 +14,7 @@ module.exports = () => {
         output: {
             path: path.resolve('./', 'npm'),
             filename: 'cross-window-message.min.js',
-            library: 'CWM',
+            library: 'initMessager',
             libraryTarget: 'umd',
             libraryExport: 'default',
             globalObject: 'this',

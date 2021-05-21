@@ -1,0 +1,24 @@
+{
+    "name": "cross-window-message",
+    "version": "1.0.0",
+    "description": "Elegant cross-window communication and global page management solution",
+    "scripts": {},
+    "unpkg": "cross-window-message.min.js",
+    "jsdelivr": "cross-window-message.min.js",
+    "typings": "cross-window-message.min.d.ts",
+    "author": "theajack",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/theajack/cross-window-message"
+    },
+    "keywords": [
+        "cross-window-message",
+        "cross-window communication",
+        "global page management",
+        "跨窗口通信",
+        "全局页面管理"
+    ],
+    "license": "MIT",
+    "devDependencies": {},
+    "dependencies": {}
+}
