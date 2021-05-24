@@ -2,13 +2,14 @@
  * @Autor: theajack
  * @Date: 2021-05-19 22:40:45
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-21 00:20:29
+ * @LastEditTime: 2021-05-24 20:57:29
  * @Description: Coding something
  */
 
 import storage from './storage';
-import {IPage} from './type';
-import {isPageHide, random} from './util';
+import {IJson, IPage} from './type';
+import {random} from './util';
+import {isPageHide} from './method';
 
 const PAGE_QUEUE_KEY = 'cwm_page_queue';
 
@@ -27,14 +28,15 @@ function writePageQueue (pageQueue: IPage[]) {
     storage.write(PAGE_QUEUE_KEY, pageQueue);
 }
 
-export function onPageEnter (pageName: string, pageId: string): IPage {
+export function onPageEnter (pageName: string, pageId: string, data?: IJson): IPage {
     const pageQueue = readPageQueue();
-    const page = {
+    const page: IPage = {
         name: pageName,
         id: pageId || `${pageName}${Date.now().toString().substr(4)}${random(100000, 999999)}`,
         index: pageQueue.length,
         show: !isPageHide(),
     };
+    if (typeof data !== 'undefined') {page.data = data;}
     pageQueue.push(page);
     writePageQueue(pageQueue);
     return page;

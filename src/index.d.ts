@@ -1,4 +1,4 @@
 
-import {IMessager} from './type';
+import {IMessager, IOptions} from './type';
 
-export default function initMessager(pageName?: string, pageId?: string): IMessager;
+export default function initMessager(options: IOptions): IMessager;

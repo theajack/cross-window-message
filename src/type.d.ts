@@ -7,6 +7,7 @@ export interface IPage {
     id: string;
     index: number;
     show: boolean;
+    data?: IJson;
 }
 
 export interface IMsgData {
@@ -67,4 +68,11 @@ export interface IPageEvents {
     triggerClick(event: MouseEvent): void;
     triggerPageShow(event: Event): void;
     triggerPageHide(event: Event): void;
+}
+
+export interface IOptions {
+    pageName?: string;
+    pageId?: string;
+    data?: IJson;
+    useSessionStorage?: boolean;
 }

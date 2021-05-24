@@ -3,7 +3,7 @@
  * @Date: 2021-05-19 22:53:39
  * @LastEditors: theajack
  * @LastEditTime: 2021-05-19 23:55:36
- * @Description: Coding something
+ * @Description: Method
  */
 
 export const INNER_MSG_TYPE = {
@@ -30,4 +30,47 @@ export function closePage () {
 
 export function onUnload (fn: (e: BeforeUnloadEvent)=>void) {
     window.addEventListener('beforeunload', fn, true);
+}
+
+const PageShowStateStr = (() => {
+    let hidden: string = '',
+        state: 'visibilityState' | 'mozVisibilityState' | 'msVisibilityState' | 'webkitVisibilityState' = 'visibilityState',
+        visibilityChange: string = '';
+    if (typeof document.hidden !== 'undefined') {
+        hidden = 'hidden';
+        visibilityChange = 'visibilitychange';
+        state = 'visibilityState';
+    } else if (typeof document.mozHidden !== 'undefined') {
+        hidden = 'mozHidden';
+        visibilityChange = 'mozvisibilitychange';
+        state = 'mozVisibilityState';
+    } else if (typeof document.msHidden !== 'undefined') {
+        hidden = 'msHidden';
+        visibilityChange = 'msvisibilitychange';
+        state = 'msVisibilityState';
+    } else if (typeof document.webkitHidden !== 'undefined') {
+        hidden = 'webkitHidden';
+        visibilityChange = 'webkitvisibilitychange';
+        state = 'webkitVisibilityState';
+    }
+    return {
+        hidden, state, visibilityChange
+    };
+})();
+
+export function isPageHide () {
+    return document[PageShowStateStr.state] === PageShowStateStr.hidden;
+}
+
+export function onPageShowHide (onshow: (e: Event)=>void, onhide?: (e: Event)=>void) {
+    // 切换后台倒计时停止问题
+    const callback = (e: Event) => {
+        if (isPageHide()) {
+            if (onhide)onhide(e);
+        } else {
+            onshow(e);
+        }
+    };
+    document.removeEventListener(PageShowStateStr.visibilityChange, callback, false);
+    document.addEventListener(PageShowStateStr.visibilityChange, callback, false);
 }

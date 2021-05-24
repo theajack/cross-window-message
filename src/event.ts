@@ -2,12 +2,10 @@
  * @Author: tackchen
  * @Date: 2021-05-19 14:38:19
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-20 00:06:16
+ * @LastEditTime: 2021-05-24 20:42:29
  * @FilePath: \cross-window-message\src\event.ts
- * @Description: Coding something
+ * @Description: Event lib
  */
-import {IJson} from './type';
-
 interface IEventReadyListener<T> {
     (...args: T[]): void
 }
@@ -77,28 +75,3 @@ export function creatEventReady<T = any> (): IEventReady<T> {
         isFirstReady: () => isFirst
     };
 }
-
-export const Event = (() => {
-    let map: IJson<IEventReady<any>> = {};
-    return {
-        regist<T = any> (name: string, option: IEventReadyListener<T> | IEventReadyOption<T>) {
-            if (!map[name]) map[name] = creatEventReady<T>();
-            return map[name].onEventReady(option);
-        },
-        emit (name: string, data?: any) {
-            if (!map[name]) return false;
-            map[name].eventReady(data);
-            return true;
-        },
-        removeListener<T = any> (name: string, listener: IEventReadyListener<T>) {
-            if (!map[name]) return;
-            map[name].removeListener(listener);
-        },
-        removeEvent (name: string) {delete map[name];},
-        clear () {map = {};},
-        isFirstEmit (name: string) {
-            if (!map[name]) return true;
-            return map[name].isFirstReady();
-        }
-    };
-})();

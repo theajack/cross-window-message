@@ -2,16 +2,15 @@
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-21 00:23:24
+ * @LastEditTime: 2021-05-24 20:56:32
  * @FilePath: \cross-window-message\src\index.ts
- * @Description: Coding something
+ * @Description: Main
  */
 import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
-import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload} from './method';
+import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload, onPageShowHide} from './method';
 import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop, readPageQueue} from './page-queue';
-import {IMsgData, IPage, IMessager, IPostMessage, IPageEvents} from './type';
-import {onPageShowHide} from './util';
+import {IMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions} from './type';
 
 const MSG_KEY = 'cross_window_msg';
 
@@ -148,16 +147,20 @@ function createDataHandler (currentPage: IPage, eventReady: IEventReadyEmit<IMsg
     };
 }
 
-export function initMessager (
+export function initMessager ({
     pageName = getDefaultPageName(),
-    pageId: string = ''
-): IMessager {
-
+    pageId = '',
+    useSessionStorage,
+    data,
+}: IOptions = {}): IMessager {
+    
     if (instance) return instance;
+
+    if (useSessionStorage === true) storage.useSessionStorage();
 
     const pageEvents = createPageEvents();
 
-    const page = onPageEnter(pageName, pageId);
+    const page = onPageEnter(pageName, pageId, data);
 
     onUnload((event) => {
         onPageUnload(page);
