@@ -24,3 +24,8 @@
 1. 将参数改为object类型
 2. 增加 data 参数，用于携带页面信息
 3. 增加 useSessionStorage 参数，用于使用 sessionStorage 存储状态
+
+### todo
+
+1. page index 计算方式
+2. 同时打开写入storage时序问题 (locker或者其他实现方式) **复杂
