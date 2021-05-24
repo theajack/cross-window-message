@@ -44,8 +44,6 @@
 4. Support tagging and tracking the status of each page to facilitate global page management
 5. Support multiple method calls such as closing subpages
 6. Support monitoring page events
-7. Page survival check to ensure page status synchronization
-8. Typescript development, easy to use, small in size
 
 ### 1. Installation and use
 

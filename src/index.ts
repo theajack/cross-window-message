@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-24 20:56:32
+ * @LastEditTime: 2021-05-24 21:02:22
  * @FilePath: \cross-window-message\src\index.ts
  * @Description: Main
  */
@@ -10,7 +10,8 @@ import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload, onPageShowHide} from './method';
 import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop, readPageQueue} from './page-queue';
-import {IMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions} from './type';
+import {IMsgData, IInnerMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions} from './type';
+import version from './version';
 
 const MSG_KEY = 'cross_window_msg';
 
@@ -18,7 +19,7 @@ let instance: IMessager; // 单例模式
 
 let postMessage: IPostMessage;
 
-function handleInnerMessage (msgData: IMsgData, currentPage: IPage) {
+function handleInnerMessage (msgData: IInnerMsgData, currentPage: IPage) {
     const type = msgData.innerMessageType;
 
     const sourcePage = msgData.page;
@@ -62,7 +63,7 @@ function handleInnerMessage (msgData: IMsgData, currentPage: IPage) {
     }
 }
 
-function initBasePostMessage (page: IPage, onHandleData: (msgData: IMsgData)=>void) {
+function initBasePostMessage (page: IPage, onHandleData: (msgData: IInnerMsgData)=>void) {
     let msgId = 0;
     postMessage = ({
         data = null,
@@ -77,7 +78,7 @@ function initBasePostMessage (page: IPage, onHandleData: (msgData: IMsgData)=>vo
         targetPageId?: string;
         targetPageName?: string;
     }) => {
-        const msgData: IMsgData = {
+        const msgData: IInnerMsgData = {
             data,
             page,
             messageType,
@@ -86,7 +87,6 @@ function initBasePostMessage (page: IPage, onHandleData: (msgData: IMsgData)=>vo
         if (typeof innerMessageType === 'number') msgData.innerMessageType = innerMessageType;
         if (typeof targetPageId === 'string') msgData.targetPageId = targetPageId;
         if (typeof targetPageName === 'string') msgData.targetPageName = targetPageName;
-
         storage.write(MSG_KEY, msgData);
         onHandleData(msgData); // 通知当前窗口
     };
@@ -129,10 +129,10 @@ function createPageMethod () {
     };
 }
 
-function createDataHandler (currentPage: IPage, eventReady: IEventReadyEmit<IMsgData>) {
-    return (data: IMsgData) => {
-        const isTargetIdMode = data.targetPageId === 'string';
-        const isTagertNameMode =  data.targetPageName === 'string';
+function createDataHandler (currentPage: IPage, eventReady: IEventReadyEmit<IInnerMsgData>) {
+    return (data: IInnerMsgData) => {
+        const isTargetIdMode = typeof data.targetPageId === 'string';
+        const isTagertNameMode =  typeof data.targetPageName === 'string';
         if (
             (!isTargetIdMode && !isTagertNameMode) ||
                 (isTargetIdMode && data.targetPageId === currentPage.id) ||
@@ -147,7 +147,7 @@ function createDataHandler (currentPage: IPage, eventReady: IEventReadyEmit<IMsg
     };
 }
 
-export function initMessager ({
+export default function initMessager ({
     pageName = getDefaultPageName(),
     pageId = '',
     useSessionStorage,
@@ -199,6 +199,8 @@ export function initMessager ({
     initPageActiveEvent(page.id, pageEvents);
     return messager;
 }
+
+initMessager.version = version;
 
 // 确认其他页面是否是存活的
 // 可能存在同时关闭写入storage异常导致有假的存活页面

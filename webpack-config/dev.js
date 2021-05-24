@@ -12,12 +12,10 @@ module.exports = {
     },
     devtool: 'eval-source-map',
     devServer: {
-        port: 8081,
         contentBase: path.resolve('./', 'public'),
         historyApiFallback: true,
         inline: true,
         host: 'localhost',
-        // host: '0.0.0.0',
         disableHostCheck: true,
         proxy: {
         },
@@ -41,6 +39,9 @@ module.exports = {
             options: {
                 configFile: './.eslintrc.js'
             }
+        }, {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader'],
         }]
     }
 };

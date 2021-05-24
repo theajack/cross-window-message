@@ -7,7 +7,6 @@ export interface IPage {
     id: string; // 页面id
     index: number; // 页面打开的次序
     show: boolean; // 页面是否可见
-    data?: IJson;
 }
 
 export interface IMsgData {
@@ -71,11 +70,4 @@ export interface IPageEvents {
     triggerClick(event: MouseEvent): void;
     triggerPageShow(event: Event): void;
     triggerPageHide(event: Event): void;
-}
-
-export interface IOptions {
-    pageName?: string;
-    pageId?: string;
-    data?: IJson;
-    useSessionStorage?: boolean;
 }
