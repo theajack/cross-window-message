@@ -7,7 +7,7 @@ declare global {
     }
 }
 
-const messager = initMessager('cwm_page');
+const messager = initMessager({pageName: 'cwm_page'});
 
 function main () {
     window.initMessager = initMessager;

@@ -7,7 +7,7 @@ export interface IPage {
     id: string; // 页面id
     index: number; // 页面打开的次序
     show: boolean; // 页面是否可见
-    data?: IJson;
+    data?: IJson; // 页面携带的数据
 }
 
 export interface IMsgData {
@@ -37,15 +37,15 @@ export interface IMessager extends IPageEventCollection {
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
     method: {
-        closeOtherPage(): void;
-        closeOtherSamePage(): void;
-        alertInTargetName(text: string | number, pageName: string): void;
-        alertInTargetId(text: string | number, pageId: string): void;
-        closePageByPageName(pageName: string): void;
-        closePageByPageId(pageId: string): void;
-        getLastOpenPage(): IPage | null;
-        getLatestActivePage(): IPage | null;
-        getAllPages(): IPage[];
+        closeOtherPage(): void; // 关闭其他所有页面
+        closeOtherSamePage(): void; // 关闭其他所有和当前页面pageName相同的页面
+        alertInTargetName(text: string | number, pageName: string): void; // 在目标pageName页面alert一条消息
+        alertInTargetId(text: string | number, pageId: string): void; // 在目标pageId页面alert一条消息
+        closePageByPageName(pageName: string): void; // 关闭所有目标pageName页面
+        closePageByPageId(pageId: string): void; // 关闭目标pageId页面
+        getLastOpenPage(): IPage | null; // 获取最新打开的页面
+        getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
+        getAllPages(): IPage[]; // 获取所有打开的页面
     }
 }
 

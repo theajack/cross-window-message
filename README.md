@@ -32,7 +32,7 @@
 
 <h3>🚀 Elegant cross-window communication and global page management solution</h3>
 
-**[中文](https://github.com/theajack/cross-window-message/blob/master/README.cn.md) | [Update Log](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [Feedback bug](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
+**[中文](https://github.com/theajack/cross-window-message/blob/master/README.cn.md) | [Use Case](https://www.theajack.com/cross-window-message/) | [Update Log](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [Feedback bug](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
 
 ---
 
@@ -45,7 +45,8 @@
 5. Support multiple method calls such as closing subpages
 6. Support monitoring page events
 7. Page survival check to ensure page status synchronization
-8. Typescript development, easy to use, small in size
+8. Support page to carry data and select sessionStorage as the storage source
+9. Typescript development, easy to use, small in size
 
 ### 1. Installation and use
 
@@ -56,7 +57,7 @@ npm i cross-window-message
 ```
 
 ```js
-import initMessager from'cross-window-message';
+import initMessager from 'cross-window-message';
 ```
 
 #### 1.2 cdn introduction
@@ -82,22 +83,54 @@ Why not use window.open with postMessage and onMessage events? There are several
 
 manual
 
-Call `initMessager` when entering the page to generate a Messager, this method supports two optional parameters, pageName and pageId
+When entering the page, call `initMessager` to generate a Messager. This method supports passing in an optional parameter option, all of which are optional. The data structure is as follows:
 
-pageName represents the name of the page, and there can be the same page. If not passed in, use the pathname of the current page
+```ts
+interface IOptions {
+    pageName?: string;
+    pageId?: string;
+    data?: IJson;
+    useSessionStorage?: boolean;
+}
+```
 
-pageId represents the page ID, each new page must be unique. If not passed in, a default unique id will be generated
+1. pageName represents the name of the page, and there can be the same page. If not passed in, use the pathname of the current page
+2. pageId represents the page ID, each new page must be unique. If not passed in, a default unique id will be generated
+3. The data carried on the current page will be written to storage
+4. Whether to use sessionStorage to store the state, the default is to use localStorage, this parameter needs to be consistent across all pages
 
 ```js
-import initMessager from'cross-window-message';
-const messager = initMessager('pageName','pageId');
+import initMessager from 'cross-window-message';
+const messager = initMessager({
+    pageName:'xxx'
+});
 ```
 
 After that, the communication between each page depends on this Messager.
 
 ### 3. api
 
-#### 3.1 Messager ts statement
+#### 3.1 initMessager
+
+Call `initMessager` to generate a Messager, this method passes in optional option parameters
+
+```js
+import initMessager from 'cross-window-message';
+const messager = initMessager({
+    pageName:'xxx'
+});
+```
+
+```ts
+interface IOptions {
+    pageName?: string;
+    pageId?: string;
+    data?: IJson;
+    useSessionStorage?: boolean;
+}
+```
+
+#### 3.2 Messager ts statement
 
 ```ts
 interface IMessager {
@@ -125,24 +158,21 @@ interface IMessager {
 }
 
 interface IPage {
-    name: string;
-    id: string;
-    index: number;
-    show: boolean;
+    name: string; // the name of the page
+    id: string; // page id
+    index: number; // order of page opening
+    show: boolean; // Whether the page is visible
+    data?: IJson; // data carried on the page
 }
 interface IMsgData {
-    data: any;
-    page: IPage;
-    messageType: string | number;
-    messageId: string;
-    targetPageId?: string;
-    targetPageName?: string;
+    data: any; // data passed by postMessage
+    page: IPage; // Information on the source page
+    messageType: string | number; // messageType passed in by postMessage
+    messageId: string; // The unique message id generated
+    targetPageId?: string; // The targetPageId passed in when calling postMessageToTargetId can use this property to determine whether the message comes from the postMessageToTargetId method
+    targetPageName?: string; // The targetPageName passed in when calling postMessageToTargetName can use this property to determine whether the message comes from the postMessageToTargetName method
 }
 ```
-
-#### 3.2 pageId and pageName
-
-Incoming or generated page id and page name attributes
 
 #### 3.3 postMessage method
 
@@ -151,8 +181,8 @@ function postMessage(data: any, messageType?: number | string): void;
 ```
 
 ```js
-import initMessager from'cross-window-message';
-const messager = initMessager('pageName','pageId');
+import initMessager from 'cross-window-message';
+const messager = initMessager();
 messager.postMessage({
     text:'Hello World!'
 })
@@ -193,8 +223,8 @@ interface IPage {
 ```
 
 ```js
-import initMessager from'cross-window-message';
-const messager = initMessager('pageName','pageId');
+import initMessager from 'cross-window-message';
+const messager = initMessager();
 messager.onMessage((msgData)=>{
     console.log(msgData);
 })
@@ -222,9 +252,9 @@ The parameters are the same as the original
 Some tool methods are exposed on the messager.method object
 
 ```js
-import initMessager from'cross-window-message';
-const messager = initMessager('pageName','pageId');
-messager.method.closeOtherPage()
+import initMessager from 'cross-window-message';
+const messager = initMessager();
+messager.method.closeOtherPage();
 ```
 
 ```ts
@@ -242,6 +272,6 @@ getAllPages(): IPage[]; // Get all open pages
 #### Version 3.8
 
 ```js
-import initMessager from'cross-window-message';
+import initMessager from 'cross-window-message';
 initMessager.version;
 ```

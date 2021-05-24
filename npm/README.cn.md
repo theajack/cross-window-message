@@ -32,7 +32,7 @@
 
 <h3>🚀 优雅的跨窗口通信与全局页面管理解决方案</h3>
 
-**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [更新日志](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [反馈](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
+**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [使用实例](https://www.theajack.com/cross-window-message/) | [更新日志](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [反馈](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
 
 ---
 
@@ -44,6 +44,9 @@
 4. 支持标记和追踪各个页面的状态，方便进行全局页面管理
 5. 支持关闭子页面等多种方法调用
 6. 支持监听页面事件
+7. 页面存活检查，保证页面状态同步
+8. 支持页面携带数据和选择sessionStorage作为存储源
+9.  typescript开发，使用简单，体积小巧
 
 ### 1. 安装使用
 
@@ -80,22 +83,54 @@ import initMessager from 'cross-window-message';
 
 使用流程
 
-进入页面时调用 `initMessager` 生成一个 Messager, 该方法支持传入两个可选参数，pageName 和 pageId
+进入页面时调用 `initMessager` 生成一个 Messager, 该方法支持传入一个可选参数 option，其中的所有属性都是可选的，数据结构如下:
 
-pageName 表示页面名称，可以有相同的页面。如果不传入则使用当前页面的 pathname
+```ts
+interface IOptions {
+    pageName?: string;
+    pageId?: string;
+    data?: IJson;
+    useSessionStorage?: boolean;
+}
+```
 
-pageId 表示页面ID，每一个新页面必须是唯一的。如果不传入会生成一个默认的唯一id
+1. pageName 表示页面名称，可以有相同的页面。如果不传入则使用当前页面的 pathname
+2. pageId 表示页面ID，每一个新页面必须是唯一的。如果不传入会生成一个默认的唯一id
+3. 当前页面携带的数据，会写入storage中
+4. 是否使用 sessionStorage 存储状态，默认是使用 localStorage，这个参数需要所有页面保持一致
 
 ```js
 import initMessager from 'cross-window-message'; 
-const messager = initMessager('pageName', 'pageId');
+const messager = initMessager({
+    pageName: 'xxx'
+});
 ```
 
 之后各个页面之间的通信都是依赖于这个 Messager 进行
 
 ### 3. api
 
-#### 3.1 Messager ts声明
+#### 3.1 initMessager
+
+调用 `initMessager` 生成一个 Messager，该方法传入可选的 option参数
+
+```js
+import initMessager from 'cross-window-message'; 
+const messager = initMessager({
+    pageName: 'xxx'
+});
+```
+
+```ts
+interface IOptions {
+    pageName?: string;
+    pageId?: string;
+    data?: IJson;
+    useSessionStorage?: boolean;
+}
+```
+
+#### 3.2 Messager ts声明
 
 ```ts
 interface IMessager {
@@ -123,24 +158,21 @@ interface IMessager {
 }
 
 interface IPage {
-    name: string;
-    id: string;
-    index: number;
-    show: boolean;
+    name: string; // 页面的名称
+    id: string; // 页面id
+    index: number; // 页面打开的次序
+    show: boolean; // 页面是否可见
+    data?: IJson; // 页面携带的数据
 }
 interface IMsgData {
-    data: any;
-    page: IPage;
-    messageType: string | number;
-    messageId: string;
-    targetPageId?: string;
-    targetPageName?: string;
+    data: any; // postMessage 传入的data
+    page: IPage; // 消息来源页面的信息
+    messageType: string | number; // postMessage 传入的 messageType
+    messageId: string; // 生成的唯一消息id
+    targetPageId?: string; // 调用 postMessageToTargetId 时传入的 targetPageId 可以通过这个属性判断消息是否来自与 postMessageToTargetId 方法
+    targetPageName?: string;  // 调用 postMessageToTargetName 时传入的 targetPageName 可以通过这个属性判断消息是否来自与 postMessageToTargetName 方法
 }
 ```
-
-#### 3.2 pageId 和 pageName
-
-传入或生成的页面id和页面名称属性
 
 #### 3.3 postMessage 方法
 
@@ -150,7 +182,7 @@ function postMessage(data: any, messageType?: number | string): void;
 
 ```js
 import initMessager from 'cross-window-message'; 
-const messager = initMessager('pageName', 'pageId');
+const messager = initMessager();
 messager.postMessage({
     text: 'Hello World!'
 })
@@ -192,7 +224,7 @@ interface IPage {
 
 ```js
 import initMessager from 'cross-window-message'; 
-const messager = initMessager('pageName', 'pageId');
+const messager = initMessager();
 messager.onMessage((msgData)=>{
     console.log(msgData);
 })
@@ -221,8 +253,8 @@ messager.method 对象上暴露了一些工具方法
 
 ```js
 import initMessager from 'cross-window-message'; 
-const messager = initMessager('pageName', 'pageId');
-messager.method.closeOtherPage()
+const messager = initMessager();
+messager.method.closeOtherPage();
 ```
 
 ```ts

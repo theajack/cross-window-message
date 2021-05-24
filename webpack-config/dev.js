@@ -17,6 +17,7 @@ module.exports = {
         inline: true,
         host: 'localhost',
         disableHostCheck: true,
+        port: 8082,
         proxy: {
         },
     },

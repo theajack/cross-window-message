@@ -1,11 +1,4 @@
 
-import {IMessager} from './type';
+import {IMessager, IOptions} from './type';
 
-interface IInitMessager {
-    (pageName?: string, pageId?: string): IMessager;
-    version: string;
-}
-
-declare const initMessager: IInitMessager;
-
-export default initMessager;
+export default function initMessager(options: IOptions): IMessager;

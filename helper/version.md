@@ -17,4 +17,10 @@
 
 ### 1.0.1
 
-修改readme
+1. 修改readme
+
+### 1.0.2
+
+1. 将参数改为object类型
+2. 增加 data 参数，用于携带页面信息
+3. 增加 useSessionStorage 参数，用于使用 sessionStorage 存储状态
