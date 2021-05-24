@@ -1,13 +1,16 @@
 import initMessager from '../src';
 import './index.css';
-
 declare global {
     interface Window {
         initMessager: any;
+        messager: any;
+        [prop: string]: any;
     }
 }
 
-const messager = initMessager({pageName: 'cwm_page'});
+const messager = initMessager({pageName: 'cwm_page', pageId: location.hash});
+
+window.messager = messager;
 
 function main () {
     window.initMessager = initMessager;

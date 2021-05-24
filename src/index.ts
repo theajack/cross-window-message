@@ -2,14 +2,17 @@
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-24 21:02:22
+ * @LastEditTime: 2021-05-24 23:49:28
  * @FilePath: \cross-window-message\src\index.ts
  * @Description: Main
  */
 import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload, onPageShowHide} from './method';
-import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop, readPageQueue} from './page-queue';
+import {
+    checkPageQueueAlive, getLastOpenPageSync, getLatestActivePageSync,
+    hidePage, onPageEnter, onPageUnload, putPageOnTop, PAGE_QUEUE_KEY, generatePage, readPageQueueSync
+} from './page-queue';
 import {IMsgData, IInnerMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions} from './type';
 import version from './version';
 
@@ -94,10 +97,19 @@ function initBasePostMessage (page: IPage, onHandleData: (msgData: IInnerMsgData
 
 function initStorageEvent (onHandleData: (msgData: IMsgData)=>void) {
     window.addEventListener('storage', (e) => {
-        if (e.key && storage.parseKey(e.key) !== MSG_KEY) return null;
-        const data = (e.newValue !== null) ? storage.parseValue(e.newValue) as IMsgData : null;
-        if (!data) return;
-        onHandleData(data);
+        if (!e.key) return;
+        const key = storage.parseKey(e.key);
+        if (key === MSG_KEY) {
+            const data = (e.newValue !== null) ? storage.parseValue(e.newValue) as IMsgData : null;
+            if (!data) return;
+            onHandleData(data);
+        } else if (key === PAGE_QUEUE_KEY) {
+            console.warn('----------------------------');
+            console.log('timestamp', Date.now());
+            console.log('oldValue', e.oldValue);
+            console.log('newValue', e.newValue);
+            console.warn('----------------------------');
+        }
     }, false);
 }
 
@@ -121,10 +133,10 @@ function createPageMethod () {
         closePageByPageId (pageId: string) {
             postMessage({data: pageId, innerMessageType: INNER_MSG_TYPE.CLOSE_PAGE_BY_ID});
         },
-        getLastOpenPage,
-        getLatestActivePage,
+        getLastOpenPage: getLastOpenPageSync,
+        getLatestActivePage: getLatestActivePageSync,
         getAllPages () {
-            return readPageQueue();
+            return readPageQueueSync();
         }
     };
 }
@@ -159,8 +171,10 @@ export default function initMessager ({
     if (useSessionStorage === true) storage.useSessionStorage();
 
     const pageEvents = createPageEvents();
+    
+    const page = generatePage(pageName, pageId, data);
 
-    const page = onPageEnter(pageName, pageId, data);
+    onPageEnter(page);
 
     onUnload((event) => {
         onPageUnload(page);
@@ -195,7 +209,7 @@ export default function initMessager ({
         method: createPageMethod()
     };
     instance = messager;
-    EnsureOtherPageAlive.send();
+    // EnsureOtherPageAlive.send();
     initPageActiveEvent(page.id, pageEvents);
     return messager;
 }

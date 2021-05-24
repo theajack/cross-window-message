@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-05-19 14:38:19
  * @LastEditors: theajack
- * @LastEditTime: 2021-05-24 20:42:29
+ * @LastEditTime: 2021-05-24 23:17:06
  * @FilePath: \cross-window-message\src\event.ts
  * @Description: Event lib
  */
@@ -23,10 +23,11 @@ interface IEventReady<T = any> {
     eventReady: IEventReadyEmit<T>;
     removeListener(fn: Function): void;
     isFirstReady(): boolean;
+    clearEvent(): void;
 }
 
 export function creatEventReady<T = any> (): IEventReady<T> {
-    const queue: {
+    let queue: {
         listener: IEventReadyListener<T>;
         args: T[];
         once: boolean;
@@ -68,10 +69,15 @@ export function creatEventReady<T = any> (): IEventReady<T> {
         if (result) queue.splice(queue.indexOf(result), 1);
     }
 
+    function clearEvent () {
+        queue = [];
+    }
+
     return {
         onEventReady,
         eventReady,
         removeListener,
-        isFirstReady: () => isFirst
+        isFirstReady: () => isFirst,
+        clearEvent
     };
 }

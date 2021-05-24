@@ -69,7 +69,7 @@ function read (key: string) {
 }
   
 function parseValue (value: string) {
-    if (value === null) {
+    if (!value) {
         return null;
     }
     const splitIndex = value.indexOf(':');
