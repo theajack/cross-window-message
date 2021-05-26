@@ -140,20 +140,22 @@ interface IMessager {
     postMessageToTargetId(targetPageId: string, data: any, messageType?: number | string): void;
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
+    onPageChange(fn: IOnPageChange): () => void;
     onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;
     method: {
-        closeOtherPage(): void;
-        closeOtherSamePage(): void;
-        alertInTargetName(text: string | number, pageName: string): void;
-        alertInTargetId(text: string | number, pageId: string): void;
-        closePageByPageName(pageName: string): void;
-        closePageByPageId(pageId: string): void;
-        getLastOpenPage(): IPage | null;
-        getLatestActivePage(): IPage | null;
-        getAllPages(): IPage[];
+        closeOtherPage(): void; // Close all other pages
+        closeOtherSamePage(): void; // Close all other pages with the same pageName as the current page
+        alertInTargetName(text: string | number, pageName: string): void; // alert a message on the target pageName page
+        alertInTargetId(text: string | number, pageId: string): void; // alert a message on the target pageId page
+        closePageByPageName(pageName: string): void; // Close all target pageName pages
+        closePageByPageId(pageId: string): void; // Close the target pageId page
+        getLastOpenPage(): IPage | null; // Get the latest opened page
+        getLatestActivePage(): IPage | null; // Get the latest active page (the page that triggered the click or onshow event)
+        getAllPages(): IPage[]; // Get all open pages
+        updataPageData(data: IJson, cover?: boolean): boolean; // Update page data
     }
 }
 
@@ -203,6 +205,8 @@ Other usage is consistent with postMessage
 
 #### 3.5 onMessage
 
+Listen to the message, this method will return a function, the execution can be used to cancel the monitoring
+
 ```ts
 function onMessage(fn: (msgData: IMsgData) => void): () => void;
 
@@ -234,7 +238,23 @@ Register for an event to receive messages
 
 The parameter received by the event callback is an IMsgData type
 
-#### 3.6 Page events
+#### 3.6 onPageChange
+
+Monitor all page change events, this method will return a function, the execution can be used to cancel the monitoring
+
+```ts
+function onPageChange(fn: (newQueue: IPage[], oldQueue: IPage[]) => void): () => void;
+```
+
+```js
+import initMessager from 'cross-window-message';
+const messager = initMessager();
+messager.onPageChange((newQueue, oldQueue)=>{
+     console.log(newQueue, oldQueue);
+})
+```
+
+#### 3.7 Page events
 
 ```ts
 function onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
@@ -247,7 +267,7 @@ They are used to monitor the beforeunload click visibilitychange event of the pa
 
 The parameters are the same as the original
 
-#### 3.7 Tool method
+#### 3.8 Tool method
 
 Some tool methods are exposed on the messager.method object
 
@@ -267,9 +287,10 @@ closePageByPageId(pageId: string): void; // Close the target pageId page
 getLastOpenPage(): IPage | null; // Get the latest opened page
 getLatestActivePage(): IPage | null; // Get the latest active page (the page that triggered the click or onshow event)
 getAllPages(): IPage[]; // Get all open pages
+updataPageData(data: IJson, cover?: boolean): boolean; // Update page data The cover parameter indicates whether the old data needs to be overwritten, the default is false
 ```
 
-#### Version 3.8
+#### Version 3.9
 
 ```js
 import initMessager from 'cross-window-message';

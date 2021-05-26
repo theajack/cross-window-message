@@ -1,6 +1,6 @@
 {
     "name": "cross-window-message",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Elegant cross-window communication and global page management solution",
     "scripts": {
         "dev": "webpack-dev-server --open --config webpack-config/dev.js",

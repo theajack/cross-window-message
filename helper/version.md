@@ -25,7 +25,9 @@
 2. 增加 data 参数，用于携带页面信息
 3. 增加 useSessionStorage 参数，用于使用 sessionStorage 存储状态
 
-### todo
+### 1.0.3
 
-1. page index 计算方式
-2. 同时打开写入storage时序问题 (locker或者其他实现方式) **复杂
+1. 增加 onPageChange 事件，用于监听页面改变
+2. 增加 method.updatePageData 方法，用于更新页面携带的数据
+3. 增加当前页面存活检查，用于修复多个页面同时打开导致的bug
+4. 修改 page.index 的计算方式

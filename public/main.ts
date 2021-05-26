@@ -4,11 +4,12 @@ import './index.css';
 declare global {
     interface Window {
         initMessager: any;
+        messager: any;
     }
 }
 
 const messager = initMessager({pageName: 'cwm_page'});
-
+window.messager = messager;
 function main () {
     window.initMessager = initMessager;
     initHtml();

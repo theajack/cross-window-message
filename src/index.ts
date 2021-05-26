@@ -1,17 +1,18 @@
 /*
  * @Author: tackchen
  * @Date: 2021-05-19 13:26:53
- * @LastEditors: theajack
- * @LastEditTime: 2021-05-24 21:02:22
+ * @LastEditors: tackchen
+ * @LastEditTime: 2021-05-26 16:10:56
  * @FilePath: \cross-window-message\src\index.ts
  * @Description: Main
  */
 import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload, onPageShowHide} from './method';
-import {checkPageQueueAlive, getLastOpenPage, getLatestActivePage, hidePage, onPageEnter, onPageUnload, putPageOnTop, readPageQueue} from './page-queue';
-import {IMsgData, IInnerMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions} from './type';
+import {getLastOpenPage, getLatestActivePage, hidePage, injectSelfPageQueueChange, onPageEnter, onPageUnload, PAGE_QUEUE_KEY, putPageOnTop, readPageQueue, updataPageData} from './page-queue';
+import {IMsgData, IInnerMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions, IOnPageChange, IJson} from './type';
 import version from './version';
+import {initEnsurePostMessage, onOtherReply, initEnsureAlive} from './ensure-alive';
 
 const MSG_KEY = 'cross_window_msg';
 
@@ -57,7 +58,7 @@ function handleInnerMessage (msgData: IInnerMsgData, currentPage: IPage) {
                 postMessage({targetPageId: sourcePage.id, innerMessageType: INNER_MSG_TYPE.REPLAY_ALIVE});
             };break;
         case INNER_MSG_TYPE.REPLAY_ALIVE:
-            EnsureOtherPageAlive.onReply(sourcePage.id);
+            onOtherReply(sourcePage.id);
             break;
         default: break;
     }
@@ -90,18 +91,27 @@ function initBasePostMessage (page: IPage, onHandleData: (msgData: IInnerMsgData
         storage.write(MSG_KEY, msgData);
         onHandleData(msgData); // 通知当前窗口
     };
+    initEnsurePostMessage(postMessage);
 }
 
-function initStorageEvent (onHandleData: (msgData: IMsgData)=>void) {
+function initStorageEvent (onHandleData: (msgData: IMsgData)=>void, onPageChange: IOnPageChange) {
     window.addEventListener('storage', (e) => {
-        if (e.key && storage.parseKey(e.key) !== MSG_KEY) return null;
-        const data = (e.newValue !== null) ? storage.parseValue(e.newValue) as IMsgData : null;
-        if (!data) return;
-        onHandleData(data);
+        if (!e.key) return;
+        const key = storage.parseKey(e.key);
+        if (key === MSG_KEY) {
+            const data = (e.newValue !== null) ? storage.parseValue(e.newValue) as IMsgData : null;
+            if (!data) return;
+            onHandleData(data);
+        } else if (key === PAGE_QUEUE_KEY) {
+            onPageChange(
+                (e.newValue !== null) ? storage.parseValue(e.newValue) as IPage[] : [],
+                (e.oldValue !== null) ? storage.parseValue(e.oldValue) as IPage[] : [],
+            );
+        }
     }, false);
 }
 
-function createPageMethod () {
+function createPageMethod (pageId: string) {
     return {
         closeOtherPage () {
             postMessage({innerMessageType: INNER_MSG_TYPE.CLOSE_OTHER_PAGE});
@@ -125,6 +135,9 @@ function createPageMethod () {
         getLatestActivePage,
         getAllPages () {
             return readPageQueue();
+        },
+        updataPageData (data: IJson, cover: boolean = false) {
+            return updataPageData(data, pageId, cover);
         }
     };
 }
@@ -168,10 +181,14 @@ export default function initMessager ({
     });
 
     const {onEventReady, eventReady, removeListener} = creatEventReady<IMsgData>();
+    
+    const onPageQueueChangeEvent = creatEventReady<IPage[]>();
+
+    injectSelfPageQueueChange(onPageQueueChangeEvent.eventReady);
 
     const onHandleData = createDataHandler(page, eventReady);
 
-    initStorageEvent(onHandleData);
+    initStorageEvent(onHandleData, onPageQueueChangeEvent.eventReady);
 
     initBasePostMessage(page, onHandleData);
 
@@ -188,37 +205,23 @@ export default function initMessager ({
             postMessage({targetPageName, data, messageType});
         },
         onMessage (fn: (msgData: IMsgData) => void) {
-            onEventReady(fn);
+            onEventReady({listener: fn, after: true});
             return () => removeListener(fn);
         },
+        onPageChange (fn: IOnPageChange) {
+            onPageQueueChangeEvent.onEventReady({listener: fn, after: true});
+            return () => onPageQueueChangeEvent.removeListener(fn);
+        },
         ...pageEvents.events,
-        method: createPageMethod()
+        method: createPageMethod(page.id)
     };
     instance = messager;
-    EnsureOtherPageAlive.send();
+    initEnsureAlive(page);
     initPageActiveEvent(page.id, pageEvents);
     return messager;
 }
 
 initMessager.version = version;
-
-// 确认其他页面是否是存活的
-// 可能存在同时关闭写入storage异常导致有假的存活页面
-const EnsureOtherPageAlive = (() => {
-    const alivePageIds: string[] = [];
-    return {
-        onReply (pageId: string) {
-            if (alivePageIds.indexOf(pageId) === -1)
-                alivePageIds.push(pageId);
-        },
-        send () {
-            postMessage({innerMessageType: INNER_MSG_TYPE.ENSURE_ALIVE});
-            setTimeout(() => {
-                checkPageQueueAlive(alivePageIds);
-            }, 300);
-        }
-    };
-})();
 
 function initPageActiveEvent (pageId: string, pageEvents: IPageEvents) {
     onPageShowHide((event) => {

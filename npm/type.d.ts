@@ -36,6 +36,7 @@ export interface IMessager extends IPageEventCollection {
     postMessageToTargetId(targetPageId: string, data: any, messageType?: number | string): void;
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
+    onPageChange(fn: IOnPageChange): () => void;
     method: {
         closeOtherPage(): void; // 关闭其他所有页面
         closeOtherSamePage(): void; // 关闭其他所有和当前页面pageName相同的页面
@@ -46,6 +47,7 @@ export interface IMessager extends IPageEventCollection {
         getLastOpenPage(): IPage | null; // 获取最新打开的页面
         getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
         getAllPages(): IPage[]; // 获取所有打开的页面
+        updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
     }
 }
 
@@ -71,6 +73,10 @@ export interface IPageEvents {
     triggerClick(event: MouseEvent): void;
     triggerPageShow(event: Event): void;
     triggerPageHide(event: Event): void;
+}
+
+export interface IOnPageChange {
+    (newQueue: IPage[], oldQueue: IPage[]): void;
 }
 
 export interface IOptions {

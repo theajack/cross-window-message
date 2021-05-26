@@ -1,31 +1,48 @@
 /*
  * @Autor: theajack
  * @Date: 2021-05-19 22:40:45
- * @LastEditors: theajack
- * @LastEditTime: 2021-05-24 20:57:29
+ * @LastEditors: tackchen
+ * @LastEditTime: 2021-05-26 16:28:25
  * @Description: Coding something
  */
 
 import storage from './storage';
-import {IJson, IPage} from './type';
+import {IJson, IOnPageChange, IPage} from './type';
 import {random} from './util';
 import {isPageHide} from './method';
 
-const PAGE_QUEUE_KEY = 'cwm_page_queue';
+export const PAGE_QUEUE_KEY = 'cwm_page_queue';
+
+// 用于触发自身的pageQueueChange 因为 onstorage 对于当前页面不触发
+let onSelfPageQueueChange: IOnPageChange;
+export function injectSelfPageQueueChange (onPageChange: IOnPageChange) {
+    onSelfPageQueueChange = onPageChange;
+}
 
 export function readPageQueue (): IPage[] {
     const result = storage.read(PAGE_QUEUE_KEY);
     return (result instanceof Array) ? result : [];
 }
 
-function findPageById (pageId: string) {
+export function findPageById (pageId: string) {
     const pageQueue = readPageQueue();
     const page = pageQueue.find(page => page.id === pageId);
     return {pageQueue, page};
 }
 
-function writePageQueue (pageQueue: IPage[]) {
+export function writePageQueue (pageQueue: IPage[]) {
+    if (onSelfPageQueueChange) {
+        onSelfPageQueueChange(pageQueue, readPageQueue());
+    }
     storage.write(PAGE_QUEUE_KEY, pageQueue);
+}
+
+export function findMaxPageIndex (pageQueue: IPage[]) {
+    let max = 0;
+    pageQueue.forEach(page => {
+        if (page.index > max) max = page.index;
+    });
+    return max;
 }
 
 export function onPageEnter (pageName: string, pageId: string, data?: IJson): IPage {
@@ -33,13 +50,30 @@ export function onPageEnter (pageName: string, pageId: string, data?: IJson): IP
     const page: IPage = {
         name: pageName,
         id: pageId || `${pageName}${Date.now().toString().substr(4)}${random(100000, 999999)}`,
-        index: pageQueue.length,
+        index: findMaxPageIndex(pageQueue) + 1,
         show: !isPageHide(),
     };
     if (typeof data !== 'undefined') {page.data = data;}
     pageQueue.push(page);
     writePageQueue(pageQueue);
     return page;
+}
+
+export function updataPageData (data: IJson, pageId: string, cover: boolean) {
+    const {pageQueue, page} = findPageById(pageId);
+    if (!page) {
+        console.error('不存在的页面 pageId');
+        return false;
+    }
+    if (cover || !page.data) {
+        page.data = data;
+    } else {
+        for (const k in data) {
+            page.data[k] = data[k];
+        }
+    }
+    writePageQueue(pageQueue);
+    return true;
 }
 
 export function onPageUnload (page: IPage) {

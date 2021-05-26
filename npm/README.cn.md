@@ -140,20 +140,22 @@ interface IMessager {
     postMessageToTargetId(targetPageId: string, data: any, messageType?: number | string): void;
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
+    onPageChange(fn: IOnPageChange): () => void;
     onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;
     method: {
-        closeOtherPage(): void;
-        closeOtherSamePage(): void;
-        alertInTargetName(text: string | number, pageName: string): void;
-        alertInTargetId(text: string | number, pageId: string): void;
-        closePageByPageName(pageName: string): void;
-        closePageByPageId(pageId: string): void;
-        getLastOpenPage(): IPage | null;
-        getLatestActivePage(): IPage | null;
-        getAllPages(): IPage[];
+        closeOtherPage(): void; // 关闭其他所有页面
+        closeOtherSamePage(): void; // 关闭其他所有和当前页面pageName相同的页面
+        alertInTargetName(text: string | number, pageName: string): void; // 在目标pageName页面alert一条消息
+        alertInTargetId(text: string | number, pageId: string): void; // 在目标pageId页面alert一条消息
+        closePageByPageName(pageName: string): void; // 关闭所有目标pageName页面
+        closePageByPageId(pageId: string): void; // 关闭目标pageId页面
+        getLastOpenPage(): IPage | null; // 获取最新打开的页面
+        getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
+        getAllPages(): IPage[]; // 获取所有打开的页面
+        updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据
     }
 }
 
@@ -203,6 +205,8 @@ function postMessageToTargetName(targetPageName: string, data: any, messageType?
 
 #### 3.5 onMessage
 
+监听消息，该方法会返回一个函数，执行可以用去取消此次监听
+
 ```ts
 function onMessage(fn: (msgData: IMsgData) => void): () => void;
 
@@ -234,7 +238,23 @@ messager.onMessage((msgData)=>{
 
 事件回调接收的参数是一个 IMsgData 类型
 
-#### 3.6 页面事件
+#### 3.6 onPageChange
+
+监听所有页面改变的事件，该方法会返回一个函数，执行可以用去取消此次监听
+
+```ts
+function onPageChange(fn: (newQueue: IPage[], oldQueue: IPage[]) => void): () => void;
+```
+
+```js
+import initMessager from 'cross-window-message'; 
+const messager = initMessager();
+messager.onPageChange((newQueue, oldQueue)=>{
+    console.log(newQueue, oldQueue);
+})
+```
+
+#### 3.7 页面事件
 
 ```ts
 function onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
@@ -247,7 +267,7 @@ function onHide(func: (event: Event) => void): () => void;
 
 参数与原生一致
 
-#### 3.7 工具方法
+#### 3.8 工具方法
 
 messager.method 对象上暴露了一些工具方法
 
@@ -267,9 +287,10 @@ closePageByPageId(pageId: string): void; // 关闭目标pageId页面
 getLastOpenPage(): IPage | null; // 获取最新打开的页面
 getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
 getAllPages(): IPage[]; // 获取所有打开的页面
+updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
 ```
 
-#### 3.8 版本
+#### 3.9 版本
 
 ```js
 import initMessager from 'cross-window-message'; 
