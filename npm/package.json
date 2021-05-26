@@ -1,7 +1,8 @@
 {
     "name": "cross-window-message",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Elegant cross-window communication and global page management solution",
+    "main": "cross-window-message.min.js",
     "scripts": {},
     "unpkg": "cross-window-message.min.js",
     "jsdelivr": "cross-window-message.min.js",
