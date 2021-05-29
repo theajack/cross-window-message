@@ -36,6 +36,35 @@
 
 ---
 
+<!--为保证目录生成正常， 请修改 helper 中的readme文件-->
+
+<details>
+    <summary>展开目录</summary>
+
+<!-- toc -->
+
+- [0. Features](#0-features)
+- [1. Installation and use](#1-installation-and-use)
+  * [1.1 npm](#11-npm)
+  * [1.2 cdn introduction](#12-cdn-introduction)
+- [2. Introduction](#2-introduction)
+- [3. api](#3-api)
+  * [3.1 initMessager](#31-initmessager)
+  * [3.2 Messager ts statement](#32-messager-ts-statement)
+  * [3.3 postMessage method](#33-postmessage-method)
+- [3.4 postMessageToTargetId and postMessageToTargetName](#34-postmessagetotargetid-and-postmessagetotargetname)
+  * [3.5 onMessage](#35-onmessage)
+  * [3.6 onPageChange](#36-onpagechange)
+  * [3.7 Page events](#37-page-events)
+  * [3.8 Tool method](#38-tool-method)
+  * [Version 3.9](#version-39)
+
+<!-- tocstop -->
+
+</details>
+
+---
+
 ### 0. Features
 
 1. Support directional communication and broadcast communication between different pages
@@ -155,7 +184,7 @@ interface IMessager {
         getLastOpenPage(): IPage | null; // Get the latest opened page
         getLatestActivePage(): IPage | null; // Get the latest active page (the page that triggered the click or onshow event)
         getAllPages(): IPage[]; // Get all open pages
-        updataPageData(data: IJson, cover?: boolean): boolean; // Update page data
+        updatePageData(data: IJson, cover?: boolean): boolean; // Update page data
     }
 }
 
@@ -287,7 +316,7 @@ closePageByPageId(pageId: string): void; // Close the target pageId page
 getLastOpenPage(): IPage | null; // Get the latest opened page
 getLatestActivePage(): IPage | null; // Get the latest active page (the page that triggered the click or onshow event)
 getAllPages(): IPage[]; // Get all open pages
-updataPageData(data: IJson, cover?: boolean): boolean; // Update page data The cover parameter indicates whether the old data needs to be overwritten, the default is false
+updatePageData(data: IJson, cover?: boolean): boolean; // Update page data The cover parameter indicates whether the old data needs to be overwritten, the default is false
 ```
 
 #### Version 3.9

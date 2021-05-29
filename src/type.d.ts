@@ -47,7 +47,7 @@ export interface IMessager extends IPageEventCollection {
         getLastOpenPage(): IPage | null; // 获取最新打开的页面
         getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
         getAllPages(): IPage[]; // 获取所有打开的页面
-        updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
+        updatePageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
     }
 }
 

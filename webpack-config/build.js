@@ -1,11 +1,6 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const RunNodeWebpackPlugin = require('run-node-webpack-plugin');
-
-const fs = require('fs');
-const version = require('../package.json').version;
-
-fs.writeFileSync(path.resolve('./', 'src/version.ts'), `export default '${version}';`, 'utf8');
+const {commonRules, resolve} = require('./rules');
 
 module.exports = () => {
     return {
@@ -19,30 +14,10 @@ module.exports = () => {
             libraryExport: 'default',
             globalObject: 'this',
         },
-        resolve: {
-            extensions: [ '.tsx', '.ts', '.js' ]
-        },
+        resolve,
         externals: {},
         module: {
-            rules: [{
-                test: /(.ts)$/,
-                use: {
-                    loader: 'ts-loader'
-                }
-            }, {
-                test: /(.js)$/,
-                use: [{
-                    loader: 'babel-loader',
-                }]
-            }, {
-                test: /(.js)$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                exclude: /node_modules/,
-                options: {
-                    configFile: './.eslintrc.js'
-                }
-            }]
+            rules: commonRules
         },
         plugins: [
             new CopyWebpackPlugin({
@@ -53,8 +28,7 @@ module.exports = () => {
                     {from: 'README.md'},
                     {from: 'LICENSE'}
                 ]
-            }),
-            new RunNodeWebpackPlugin({scriptToRun: './helper/sync-npm-version.js'})
+            })
         ]
     };
 };

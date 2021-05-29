@@ -9,7 +9,7 @@
 import {creatEventReady, IEventReadyEmit} from './event';
 import storage from './storage';
 import {closePage, getDefaultPageName, INNER_MSG_TYPE, onUnload, onPageShowHide} from './method';
-import {getLastOpenPage, getLatestActivePage, hidePage, injectSelfPageQueueChange, onPageEnter, onPageUnload, PAGE_QUEUE_KEY, putPageOnTop, readPageQueue, updataPageData} from './page-queue';
+import {getLastOpenPage, getLatestActivePage, hidePage, injectSelfPageQueueChange, onPageEnter, onPageUnload, PAGE_QUEUE_KEY, putPageOnTop, readPageQueue, updatePageData} from './page-queue';
 import {IMsgData, IInnerMsgData, IPage, IMessager, IPostMessage, IPageEvents, IOptions, IOnPageChange, IJson} from './type';
 import version from './version';
 import {initEnsurePostMessage, onOtherReply, initEnsureAlive} from './ensure-alive';
@@ -136,8 +136,8 @@ function createPageMethod (pageId: string) {
         getAllPages () {
             return readPageQueue();
         },
-        updataPageData (data: IJson, cover: boolean = false) {
-            return updataPageData(data, pageId, cover);
+        updatePageData (data: IJson, cover: boolean = false) {
+            return updatePageData(data, pageId, cover);
         }
     };
 }

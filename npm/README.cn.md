@@ -36,6 +36,35 @@
 
 ---
 
+<!--为保证目录生成正常， 请修改 helper 中的readme文件-->
+
+<details>
+    <summary>展开目录</summary>
+
+<!-- toc -->
+
+- [0. 特性](#0-%E7%89%B9%E6%80%A7)
+- [1. 安装使用](#1-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8)
+  * [1.1 npm](#11-npm)
+  * [1.2 cdn 引入](#12-cdn-%E5%BC%95%E5%85%A5)
+- [2. 使用介绍](#2-%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)
+- [3. api](#3-api)
+  * [3.1 initMessager](#31-initmessager)
+  * [3.2 Messager ts声明](#32-messager-ts%E5%A3%B0%E6%98%8E)
+  * [3.3 postMessage 方法](#33-postmessage-%E6%96%B9%E6%B3%95)
+- [3.4 postMessageToTargetId 和 postMessageToTargetName](#34-postmessagetotargetid-%E5%92%8C-postmessagetotargetname)
+  * [3.5 onMessage](#35-onmessage)
+  * [3.6 onPageChange](#36-onpagechange)
+  * [3.7 页面事件](#37-%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6)
+  * [3.8 工具方法](#38-%E5%B7%A5%E5%85%B7%E6%96%B9%E6%B3%95)
+  * [3.9 版本](#39-%E7%89%88%E6%9C%AC)
+
+<!-- tocstop -->
+
+</details>
+
+---
+
 ### 0. 特性
 
 1. 支持不同页面之间的 定向通信 和 广播通信
@@ -46,7 +75,7 @@
 6. 支持监听页面事件
 7. 页面存活检查，保证页面状态同步
 8. 支持页面携带数据和选择sessionStorage作为存储源
-9.  typescript开发，使用简单，体积小巧
+9. typescript开发，使用简单，体积小巧
 
 ### 1. 安装使用
 
@@ -155,7 +184,7 @@ interface IMessager {
         getLastOpenPage(): IPage | null; // 获取最新打开的页面
         getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
         getAllPages(): IPage[]; // 获取所有打开的页面
-        updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据
+        updatePageData(data: IJson, cover?: boolean): boolean; // 更新页面数据
     }
 }
 
@@ -287,7 +316,7 @@ closePageByPageId(pageId: string): void; // 关闭目标pageId页面
 getLastOpenPage(): IPage | null; // 获取最新打开的页面
 getLatestActivePage(): IPage | null; // 获取最新的活跃页面 (触发了click或者onshow事件的页面)
 getAllPages(): IPage[]; // 获取所有打开的页面
-updataPageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
+updatePageData(data: IJson, cover?: boolean): boolean; // 更新页面数据 cover 参数表示是否需要覆盖旧的数据，默认为false
 ```
 
 #### 3.9 版本

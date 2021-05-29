@@ -43,24 +43,6 @@
 
 <!-- toc -->
 
-- [0. 特性](#0-%E7%89%B9%E6%80%A7)
-- [1. 安装使用](#1-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8)
-  * [1.1 npm](#11-npm)
-  * [1.2 cdn 引入](#12-cdn-%E5%BC%95%E5%85%A5)
-- [2. 使用介绍](#2-%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)
-- [3. api](#3-api)
-  * [3.1 initMessager](#31-initmessager)
-  * [3.2 Messager ts声明](#32-messager-ts%E5%A3%B0%E6%98%8E)
-  * [3.3 postMessage 方法](#33-postmessage-%E6%96%B9%E6%B3%95)
-- [3.4 postMessageToTargetId 和 postMessageToTargetName](#34-postmessagetotargetid-%E5%92%8C-postmessagetotargetname)
-  * [3.5 onMessage](#35-onmessage)
-  * [3.6 onPageChange](#36-onpagechange)
-  * [3.7 页面事件](#37-%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6)
-  * [3.8 工具方法](#38-%E5%B7%A5%E5%85%B7%E6%96%B9%E6%B3%95)
-  * [3.9 版本](#39-%E7%89%88%E6%9C%AC)
-
-<!-- tocstop -->
-
 </details>
 
 ---

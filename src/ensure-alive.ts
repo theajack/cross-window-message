@@ -1,8 +1,8 @@
 /*
  * @Author: tackchen
  * @Date: 2021-05-26 15:29:30
- * @LastEditors: tackchen
- * @LastEditTime: 2021-05-26 16:33:47
+ * @LastEditors: theajack
+ * @LastEditTime: 2021-05-29 10:37:37
  * @FilePath: \cross-window-message\src\ensure-alive.ts
  * @Description: 页面存活和关闭检查机制
  */

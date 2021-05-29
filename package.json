@@ -1,13 +1,13 @@
 {
     "name": "cross-window-message",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Elegant cross-window communication and global page management solution",
     "scripts": {
         "dev": "webpack-dev-server --open --config webpack-config/dev.js",
-        "build": "webpack --config webpack-config/build.js",
         "build-web": "webpack --config webpack-config/build-web.js",
         "lint": "eslint src --ext js",
-        "publish": "npm publish npm"
+        "publish": "npm publish npm",
+        "build": "node ./helper/build.js"
     },
     "author": "theajack",
     "repository": {
@@ -34,6 +34,7 @@
         "babel-eslint": "^10.0.3",
         "babel-loader": "^8.0.6",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
+        "chalk": "^4.1.1",
         "copy-webpack-plugin": "^6.2.1",
         "css-loader": "^5.2.5",
         "eslint": "^6.8.0",
@@ -42,9 +43,13 @@
         "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-node": "^10.0.0",
         "eslint-plugin-promise": "^4.2.1",
+        "gulp": "^4.0.2",
+        "gulp-markdown-toc": "^1.1.0",
         "husky": "^3.0.9",
+        "less": "^4.1.1",
+        "less-loader": "^9.0.0",
         "lint-staged": "^9.4.2",
-        "run-node-webpack-plugin": "^1.3.0",
+        "single-line-log": "^1.1.2",
         "style-loader": "^2.0.0",
         "ts-loader": "^6.2.1",
         "typescript": "^3.7.4",

@@ -1,6 +1,6 @@
 {
     "name": "cross-window-message",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "Elegant cross-window communication and global page management solution",
     "main": "cross-window-message.min.js",
     "scripts": {},

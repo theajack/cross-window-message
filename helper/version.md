@@ -35,3 +35,8 @@
 ### 1.0.4
 
 1. npm 包增加 main字段
+
+### 1.0.5
+
+1. 修正 updatePageData 方法名
+2. 优化 webpack 构建流程

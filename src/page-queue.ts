@@ -59,7 +59,7 @@ export function onPageEnter (pageName: string, pageId: string, data?: IJson): IP
     return page;
 }
 
-export function updataPageData (data: IJson, pageId: string, cover: boolean) {
+export function updatePageData (data: IJson, pageId: string, cover: boolean) {
     const {pageQueue, page} = findPageById(pageId);
     if (!page) {
         console.error('不存在的页面 pageId');
