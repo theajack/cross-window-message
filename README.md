@@ -36,28 +36,29 @@
 
 ---
 
-<!--为保证目录生成正常， 请修改 helper 中的readme文件-->
+<!--To ensure that the directory is generated normally, please modify the readme file in the helper-->
 
 <details>
-    <summary>展开目录</summary>
+    <summary>Expand the table of contents</summary>
 
 <!-- toc -->
 
-- [0. Features](#0-features)
-- [1. Installation and use](#1-installation-and-use)
-  * [1.1 npm](#11-npm)
-  * [1.2 cdn introduction](#12-cdn-introduction)
-- [2. Introduction](#2-introduction)
-- [3. api](#3-api)
-  * [3.1 initMessager](#31-initmessager)
-  * [3.2 Messager ts statement](#32-messager-ts-statement)
-  * [3.3 postMessage method](#33-postmessage-method)
-- [3.4 postMessageToTargetId and postMessageToTargetName](#34-postmessagetotargetid-and-postmessagetotargetname)
-  * [3.5 onMessage](#35-onmessage)
-  * [3.6 onPageChange](#36-onpagechange)
-  * [3.7 Page events](#37-page-events)
-  * [3.8 Tool method](#38-tool-method)
-  * [Version 3.9](#version-39)
+- [cross-window-message](#cross-window-message)
+    - [0. Features](#0-features)
+    - [1. Installation and use](#1-installation-and-use)
+      - [1.1 npm](#11-npm)
+      - [1.2 cdn introduction](#12-cdn-introduction)
+    - [2. Introduction](#2-introduction)
+    - [3. api](#3-api)
+      - [3.1 initMessager](#31-initmessager)
+      - [3.2 Messager ts statement](#32-messager-ts-statement)
+      - [3.3 postMessage method](#33-postmessage-method)
+    - [3.4 postMessageToTargetId and postMessageToTargetName](#34-postmessagetotargetid-and-postmessagetotargetname)
+      - [3.5 onMessage](#35-onmessage)
+      - [3.6 onPageChange](#36-onpagechange)
+      - [3.7 Page events](#37-page-events)
+      - [3.8 Tool method](#38-tool-method)
+      - [Version 3.9](#version-39)
 
 <!-- tocstop -->
 

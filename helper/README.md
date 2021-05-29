@@ -36,10 +36,10 @@
 
 ---
 
-<!--为保证目录生成正常， 请修改 helper 中的readme文件-->
+<!--To ensure that the directory is generated normally, please modify the readme file in the helper-->
 
 <details>
-    <summary>展开目录</summary>
+    <summary>Expand the table of contents</summary>
 
 <!-- toc -->
 
