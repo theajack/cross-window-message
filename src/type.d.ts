@@ -24,7 +24,8 @@ export interface IInnerMsgData extends IMsgData{
 }
 
 interface IPageEventCollection {
-    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onUnload(func: (event: Event) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;

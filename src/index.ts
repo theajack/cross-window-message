@@ -243,6 +243,7 @@ function createPageEvents (): IPageEvents {
         Click,
         Show,
         Hide,
+        BeforeUnload
     }
     interface IPageEventData {
         type: EventType;
@@ -272,7 +273,10 @@ function createPageEvents (): IPageEvents {
 
     return {
         events: {
-            onUnload (func: (event: BeforeUnloadEvent)=>void) {
+            onBeforeUnload (func: (event: BeforeUnloadEvent)=>void) {
+                return registEvent(func, EventType.BeforeUnload);
+            },
+            onUnload (func: (event: Event)=>void) {
                 return registEvent(func, EventType.Unload);
             },
             onClick (func: (event: MouseEvent)=>void) {

@@ -152,7 +152,8 @@ interface IMessager {
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
     onPageChange(fn: IOnPageChange): () => void;
-    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onUnload(func: (event: Event) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;
@@ -268,13 +269,14 @@ messager.onPageChange((newQueue, oldQueue)=>{
 #### 3.7 Page events
 
 ```ts
-function onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onUnload(func: (event: Event) => void): () => void;
 function onClick(func: (event: MouseEvent) => void): () => void;
 function onShow(func: (event: Event) => void): () => void;
 function onHide(func: (event: Event) => void): () => void;
 ```
 
-They are used to monitor the beforeunload click visibilitychange event of the page respectively
+They are used to monitor the beforeunload, unload, click, visibilitychange event of the page respectively
 
 The parameters are the same as the original
 

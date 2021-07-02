@@ -40,3 +40,9 @@
 
 1. 修正 updatePageData 方法名
 2. 优化 webpack 构建流程
+
+### 1.0.6
+
+1. 使用 unload 事件代替之前的 beforeunload 事件，可以解决在取消关闭页面时页面已经被删除的问题
+2. 增加 onBeforeUnload 事件
+3. 使用 console.warn 代替 error

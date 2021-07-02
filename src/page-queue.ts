@@ -1,8 +1,8 @@
 /*
  * @Autor: theajack
  * @Date: 2021-05-19 22:40:45
- * @LastEditors: tackchen
- * @LastEditTime: 2021-05-26 16:28:25
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-03 00:45:05
  * @Description: Coding something
  */
 
@@ -62,7 +62,7 @@ export function onPageEnter (pageName: string, pageId: string, data?: IJson): IP
 export function updatePageData (data: IJson, pageId: string, cover: boolean) {
     const {pageQueue, page} = findPageById(pageId);
     if (!page) {
-        console.error('不存在的页面 pageId');
+        console.warn('不存在的页面 pageId');
         return false;
     }
     if (cover || !page.data) {

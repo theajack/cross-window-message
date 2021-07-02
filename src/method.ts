@@ -1,8 +1,8 @@
 /*
  * @Autor: theajack
  * @Date: 2021-05-19 22:53:39
- * @LastEditors: theajack
- * @LastEditTime: 2021-05-19 23:55:36
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-03 00:54:30
  * @Description: Method
  */
 
@@ -28,7 +28,15 @@ export function closePage () {
     }, 100);
 }
 
-export function onUnload (fn: (e: BeforeUnloadEvent)=>void) {
+export function onUnload (fn: (e: Event)=>void) {
+    if (typeof window.onunload !== 'undefined') {
+        window.addEventListener('unload', fn, true);
+    } else { // 如果不支持onunload事件 则使用beforeUnload代替
+        onBeforeUnload(fn);
+    }
+}
+
+export function onBeforeUnload (fn: (e: BeforeUnloadEvent)=>void) {
     window.addEventListener('beforeunload', fn, true);
 }
 
@@ -71,6 +79,6 @@ export function onPageShowHide (onshow: (e: Event)=>void, onhide?: (e: Event)=>v
             onshow(e);
         }
     };
-    document.removeEventListener(PageShowStateStr.visibilityChange, callback, false);
-    document.addEventListener(PageShowStateStr.visibilityChange, callback, false);
+    document.removeEventListener(PageShowStateStr.visibilityChange, callback, true);
+    document.addEventListener(PageShowStateStr.visibilityChange, callback, true);
 }

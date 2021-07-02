@@ -43,22 +43,21 @@
 
 <!-- toc -->
 
-- [cross-window-message](#cross-window-message)
-    - [0. Features](#0-features)
-    - [1. Installation and use](#1-installation-and-use)
-      - [1.1 npm](#11-npm)
-      - [1.2 cdn introduction](#12-cdn-introduction)
-    - [2. Introduction](#2-introduction)
-    - [3. api](#3-api)
-      - [3.1 initMessager](#31-initmessager)
-      - [3.2 Messager ts statement](#32-messager-ts-statement)
-      - [3.3 postMessage method](#33-postmessage-method)
-    - [3.4 postMessageToTargetId and postMessageToTargetName](#34-postmessagetotargetid-and-postmessagetotargetname)
-      - [3.5 onMessage](#35-onmessage)
-      - [3.6 onPageChange](#36-onpagechange)
-      - [3.7 Page events](#37-page-events)
-      - [3.8 Tool method](#38-tool-method)
-      - [Version 3.9](#version-39)
+- [0. Features](#0-features)
+- [1. Installation and use](#1-installation-and-use)
+  * [1.1 npm](#11-npm)
+  * [1.2 cdn introduction](#12-cdn-introduction)
+- [2. Introduction](#2-introduction)
+- [3. api](#3-api)
+  * [3.1 initMessager](#31-initmessager)
+  * [3.2 Messager ts statement](#32-messager-ts-statement)
+  * [3.3 postMessage method](#33-postmessage-method)
+- [3.4 postMessageToTargetId and postMessageToTargetName](#34-postmessagetotargetid-and-postmessagetotargetname)
+  * [3.5 onMessage](#35-onmessage)
+  * [3.6 onPageChange](#36-onpagechange)
+  * [3.7 Page events](#37-page-events)
+  * [3.8 Tool method](#38-tool-method)
+  * [Version 3.9](#version-39)
 
 <!-- tocstop -->
 
@@ -171,7 +170,8 @@ interface IMessager {
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
     onPageChange(fn: IOnPageChange): () => void;
-    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onUnload(func: (event: Event) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;
@@ -287,13 +287,14 @@ messager.onPageChange((newQueue, oldQueue)=>{
 #### 3.7 Page events
 
 ```ts
-function onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onUnload(func: (event: Event) => void): () => void;
 function onClick(func: (event: MouseEvent) => void): () => void;
 function onShow(func: (event: Event) => void): () => void;
 function onHide(func: (event: Event) => void): () => void;
 ```
 
-They are used to monitor the beforeunload click visibilitychange event of the page respectively
+They are used to monitor the beforeunload, unload, click, visibilitychange event of the page respectively
 
 The parameters are the same as the original
 

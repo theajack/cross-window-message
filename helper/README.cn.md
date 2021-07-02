@@ -152,7 +152,8 @@ interface IMessager {
     postMessageToTargetName(targetPageName: string, data: any, messageType?: number | string): void;
     onMessage(fn: (msgData: IMsgData) => void): () => void;
     onPageChange(fn: IOnPageChange): () => void;
-    onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+    onUnload(func: (event: Event) => void): () => void;
     onClick(func: (event: MouseEvent) => void): () => void;
     onShow(func: (event: Event) => void): () => void;
     onHide(func: (event: Event) => void): () => void;
@@ -268,13 +269,14 @@ messager.onPageChange((newQueue, oldQueue)=>{
 #### 3.7 页面事件
 
 ```ts
-function onUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onBeforeUnload(func: (event: BeforeUnloadEvent) => void): () => void;
+function onUnload(func: (event: Event) => void): () => void;
 function onClick(func: (event: MouseEvent) => void): () => void;
 function onShow(func: (event: Event) => void): () => void;
 function onHide(func: (event: Event) => void): () => void;
 ```
 
-分别用于监听页面的 beforeunload click visibilitychange 事件
+分别用于监听页面的 beforeunload, unload, click, visibilitychange 事件
 
 参数与原生一致
 
