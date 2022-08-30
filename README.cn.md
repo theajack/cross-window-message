@@ -32,7 +32,7 @@
 
 <h3>🚀 优雅的跨窗口通信与全局页面管理解决方案</h3>
 
-**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [使用实例](https://www.theajack.com/cross-window-message/) | [更新日志](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [反馈](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
+**[English](https://github.com/theajack/cross-window-message/blob/master/README.md) | [使用实例](https://shiyix.cn/cross-window-message/) | [更新日志](https://github.com/theajack/cross-window-message/blob/master/helper/version.md) | [反馈](https://github.com/theajack/cross-window-message/issues/new) | [Gitee](https://gitee.com/theajack/cross-window-message)**
 
 ---
 
